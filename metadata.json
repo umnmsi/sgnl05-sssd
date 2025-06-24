@@ -15,7 +15,11 @@
     },
     {
       "operatingsystem": "RedHat",
-      "operatingsystemrelease": ["5","6","7","8"]
+      "operatingsystemrelease": ["5","6","7","8","9"]
+    },
+    {
+      "operatingsystem": "Rocky",
+      "operatingsystemrelease": ["8","9"]
     },
     {
       "operatingsystem": "CentOS",
@@ -47,7 +51,7 @@
     }
   ],
   "requirements": [
-    {"name":"puppet","version_requirement":">= 5.5.10 < 7.0.0" }
+    {"name":"puppet","version_requirement":">= 5.5.10 < 8.0.0" }
   ],
   "dependencies": [
     {"name":"puppetlabs/stdlib","version_requirement":">= 5.2.0 < 7.0.0"}
