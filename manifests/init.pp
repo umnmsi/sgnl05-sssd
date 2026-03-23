@@ -97,8 +97,8 @@ class sssd (
         warning("osname Amazon's os.release.major is <${::facts['os']['release']['major']}> and must be 2.")
       }
     } elsif ($::facts['os']['name'] in ['RedHat', 'CentOS']) {
-      if !($::facts['os']['release']['major'] in ['6', '7', '8', '9']) {
-        warning("osname RedHat's os.release.major is <${::facts['os']['release']['major']}> and must be 6, 7, 8 or 9.")
+      if !($::facts['os']['release']['major'] in ['6', '7', '8', '9', '10']) {
+        warning("osname RedHat's os.release.major is <${::facts['os']['release']['major']}> and must be 6, 7, 8, 9 or 10.")
       }
     } elsif ($::facts['os']['name'] == 'Fedora') {
       if !($::facts['os']['release']['major'] in ['30', '31', '32', '33']) {
@@ -196,11 +196,19 @@ class sssd (
     default  => '0600',
   }
 
+  $config_group = $facts['os']['name'] ? {
+    'Rocky'  => $facts['os']['release']['major'] ? {
+      '10'    => 'sssd',
+      default => 'root',
+    },
+    default  => 'root',
+  }
+
   file { 'sssd.conf':
     ensure  => $file_ensure,
     path    => $config_file,
     owner   => 'root',
-    group   => 'root',
+    group   => $config_group,
     mode    => $config_mode,
     content => template($config_template),
   }

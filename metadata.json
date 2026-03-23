@@ -15,11 +15,11 @@
     },
     {
       "operatingsystem": "RedHat",
-      "operatingsystemrelease": ["5","6","7","8","9"]
+      "operatingsystemrelease": ["5","6","7","8","9","10"]
     },
     {
       "operatingsystem": "Rocky",
-      "operatingsystemrelease": ["8","9"]
+      "operatingsystemrelease": ["8","9","10"]
     },
     {
       "operatingsystem": "CentOS",

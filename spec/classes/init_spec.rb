@@ -506,14 +506,16 @@ describe 'sssd' do
           it { is_expected.not_to contain_service('oddjobd') }
         end
 
-        expected_mode = (v[:facts_hash][:os]['name'] == 'Rocky' && v[:facts_hash][:os]['release']['major'] == '10') ? '0640' : '0600'
+        is_rocky10 = (v[:facts_hash][:os]['name'] == 'Rocky' && v[:facts_hash][:os]['release']['major'] == '10')
+        expected_mode = is_rocky10 ? '0640' : '0600'
+        expected_group = is_rocky10 ? 'sssd' : 'root'
 
         it do
           should contain_file('sssd.conf').with({
             :ensure  => 'file',
             :path    => '/etc/sssd/sssd.conf',
             :owner   => 'root',
-            :group   => 'root',
+            :group   => expected_group,
             :mode    => expected_mode,
             :content => /^# Managed by Puppet.\n\n\[sssd\]\ndomains = example.com\nconfig_file_version = 2\nservices = nss, pam\n\n\[domain\/example.com\]\naccess_provider = simple\nsimple_allow_users = root\n/
           })
