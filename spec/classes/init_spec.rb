@@ -413,6 +413,25 @@ describe 'sssd' do
         },
       },
     },
+    'rocky10' => {
+      :extra_packages => [
+        'authselect',
+        'oddjob-mkhomedir',
+      ],
+      :manage_oddjobd => true,
+      :facts_hash => {
+        :osfamily => 'RedHat',
+        :operatingsystem => 'Rocky',
+        :operatingsystemmajrelease => '10',
+        :os => {
+          'family' => 'RedHat',
+          'name'   => 'Rocky',
+          'release' => {
+            'major' => '10',
+          },
+        },
+      },
+    },
   }
 
   describe 'with default values for parameters on' do
@@ -487,13 +506,15 @@ describe 'sssd' do
           it { is_expected.not_to contain_service('oddjobd') }
         end
 
+        expected_mode = (v[:facts_hash][:os]['name'] == 'Rocky' && v[:facts_hash][:os]['release']['major'] == '10') ? '0640' : '0600'
+
         it do
           should contain_file('sssd.conf').with({
             :ensure  => 'file',
             :path    => '/etc/sssd/sssd.conf',
             :owner   => 'root',
             :group   => 'root',
-            :mode    => '0600',
+            :mode    => expected_mode,
             :content => /^# Managed by Puppet.\n\n\[sssd\]\ndomains = example.com\nconfig_file_version = 2\nservices = nss, pam\n\n\[domain\/example.com\]\naccess_provider = simple\nsimple_allow_users = root\n/
           })
         end

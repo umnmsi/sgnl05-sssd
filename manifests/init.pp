@@ -188,12 +188,20 @@ class sssd (
     default   => $ensure,
   }
 
+  $config_mode = $facts['os']['name'] ? {
+    'Rocky'  => $facts['os']['release']['major'] ? {
+      '10'    => '0640',
+      default => '0600',
+    },
+    default  => '0600',
+  }
+
   file { 'sssd.conf':
     ensure  => $file_ensure,
     path    => $config_file,
     owner   => 'root',
     group   => 'root',
-    mode    => '0600',
+    mode    => $config_mode,
     content => template($config_template),
   }
 
